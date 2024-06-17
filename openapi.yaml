@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  title: Technical Assessment Task
+  description: This is a documentation of the endpoints developed for G&G technical assessment
+  version: latest
+tags:
+  - name: files
+    description: Available operations with files such as converting file from txt to JSON format.
+paths:
+  /api/files/process:
+    post:
+      tags:
+        - Files
+      operationId: processFile
+      description: Converts .txt to .json
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              $ref: "#/components/schemas/InputTxtFile"
+        required: true
+      responses:
+        200:
+          description: "Successfully converted .txt file to .json"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProcessedFileResponse"
+        400:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+components:
+  schemas:
+    InputTxtFile:
+      type: string
+      format: binary
+      description: "The .txt file to be converted. 
+      Must adhere to the pattern UUID|ID|Name|Likes|Transport|Avg Speed|Top Speed.
+      Each row separated by new line terminator \n"
+
+    ProcessedFileResponse:
+      type: array
+      items:
+        $ref: "#/components/schemas/EntryFileOutcome"
+
+    EntryFileOutcome:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Person's name
+        Transport:
+          type: string
+          description: Transport type
+        Top Speed:
+          type: number
+          format: double
+          description: Top speed
+
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Error"
+
+    Error:
+      type: object
+      properties:
+        detailMessage:
+          type: string

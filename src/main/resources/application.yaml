@@ -1,0 +1,2 @@
+spring.application.name: assesment
+springdoc.swagger-ui.path: /swagger-ui-custom.html
